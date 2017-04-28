@@ -3,6 +3,8 @@ SIP-Based DoS Attack Simulator
 
 SIP-DAS (DoS Attack Simulator) is a tool developed to simulate SIP-based DoS attacks. It has been developed to be used in academic work to help developing novel SIP-based DDoS attacks and defense approaches in original. 
 
+SIP-DAS was originally written in Java, but it has been rewritten using Python, so that various advantageous libraries can be used.  
+
 It has been used in an academic journal paper titled "Novel SIP-based DDoS Attacks and Effective Defense Strategies" published in Computers & Security 63 (2016) 29-44 by  Elsevier, Science Direct http://sciencedirect.com/science/article/pii/S0167404816300980. 
 
 SIP-DAS comprises four main components: spoofed IP address generator, SIP message generator, message sender and scenario player. It needs outputs of SIP-NES (Network Scanner) and SIP-ENUM (Enumerator) along with some pre-defined files. SIP-DAS also provides a framework for SIP-ASP (Attack Scenario Player).
