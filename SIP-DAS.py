@@ -4,20 +4,29 @@
 """
 SIP-DAS.py: SIP-DAS is a tool developed to simulate SIP-based DoS attacks.
 
+# At first you need to instal: 
+# apt-get install python-scapy
+# pip install netifaces
+# pip install ipaddress
+# apt-get install figlet
+# apt-get install toilet
+
 # usage-1: sudo ./SIP-DAS.py -i -c <numberofpackets> -s  -d <sipserverIP>
 # usage-2: sudo ./SIP-DAS.py -i -c <numberofpackets> -m iplist.txt -d <sipserverIP>
 # usage-3: sudo ./SIP-DAS.py -i -c <numberofpackets> -r -d <sipserverIP> 
+
+# Tips for getting SIP trace:
+# ngrep -W byline -d eth0 port 5060
+# ngrep -W byline -d eth0 port 5060 -O capture_file
+# ngrep -W byline -d eth0 INVITE
+# tcpdump -i eth0 -n -s 0 port 5060
+# tcpdump -i eth0 -n -s 0 port 5060 -vvv -w /home/capture_file_name
+# tcpdump -nqt -s 0 -A -i en0 port 5060
 
 # File name: SIP-DAS.py
 # Date created: 4/26/2017
 # Date last modified: 4/28/2017
 # Python Version: 2.7
-
-# You need to instal: 
-# pip install netifaces
-# pip install ipaddress
-# apt-get install figlet
-# apt-get install toilet
 """
 
 __author__ = "Melih Tas"
