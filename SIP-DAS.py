@@ -96,10 +96,10 @@ def sipGen():
 
    while i < counter:
       try:
-         branch2=string.lowercase+string.digits+string.uppercase
+         branch2=string.ascii_lowercase+string.digits+string.ascii_uppercase
          branch1=''.join(random.sample(branch2,14))
          clientPort=randint(100,1000)
-         callIDprefix2=string.digits+string.lowercase
+         callIDprefix2=string.digits+string.ascii_lowercase
          callIDprefix=''.join(random.sample(callIDprefix2,27))
          tag1=randint(100000,999999)
          toUser1=random.choice([line.rstrip('\n') for line in open("toUser.txt")])
@@ -117,19 +117,23 @@ def sipGen():
             client=random.choice([line.rstrip('\n') for line in open(args[0])])
          if options.subnet and not options.tcp: 
 
-            interfaceParam = 'eth0'
+            interfaceParam = 'ens18'
             ipAdresi = netifaces.ifaddresses(interfaceParam)[2][0]['addr']
             netMask = netifaces.ifaddresses(interfaceParam)[2][0]['netmask']
 
             client = randomIPAddressForInterface(ipAdresi, netMask)
 
+         protocol = "UDP"
+         if options.tcp:
+             protocol = "TCP"
+
          #SIP Payload - can be modify as needed!
          if options.invite:
             sip = ("INVITE sip:" + str(toUser1) + "@" + options.server + " SIP/2.0\r\n"
-            "Via: SIP/2.0/UDP " + str(client) + ":" + str(clientPort) + ";branch=" + str(branch1) + "\r\n"
+            "Via: SIP/2.0/" + protocol + " " + str(client) + ":" + str(clientPort) + ";branch=" + str(branch1) + "\r\n"
             "Max-Forwards: 70\r\n"
             "To: <sip:" + str(toUser1) + "@" + options.server + ":5060>\r\n"
-            "From: <sip:" + str(fromUser1) + "@" + str(client) + ";tag=" + str(tag1) + "\r\n"
+            "From: <sip:" + str(fromUser1) + "@" + str(client) + ">;tag=" + str(tag1) + "\r\n"
             "Call-ID: " + str(callIDprefix) + str(callid) + "@" + str(client) +"\r\n"
             "CSeq: 1 INVITE\r\n"
             "Allow: INVITE, ACK, CANCEL, OPTIONS, BYE, REFER, NOTIFY, MESSAGE, SUBSCRIBE, INFO\r\n"
@@ -141,10 +145,10 @@ def sipGen():
          if options.tcp:
             s=socket.socket(socket.AF_INET,socket.SOCK_STREAM)
             s.connect((options.server, server_port))
-            sent=s.send(sip)
+            sent=s.send(sip.encode())
          else:
             pkt= IP(src=client, dst=options.server)/UDP(sport=client_port, dport=server_port)/sip
-            send(pkt, iface="eth0")
+            send(pkt, iface="ens18")
             i +=1
       except (KeyboardInterrupt):
             promisc("off")
@@ -160,7 +164,7 @@ def random_line(file):
     return lines
 
 def randomIPAddressForInterface(IP,Netmask):
-    targetNetwork = ipaddress.IPv4Network(unicode(IP+'/'+Netmask), strict=False)
+    targetNetwork = ipaddress.IPv4Network(str(IP+'/'+Netmask), strict=False)
     ipCount = int(targetNetwork.num_addresses)
     firstIpAddress = targetNetwork.network_address
     randomInt = random.randint(0,ipCount-1)
